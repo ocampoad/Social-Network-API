@@ -1,11 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
+require('dotenv');
 
 const app = express(); 
 
 const PORT = process.env.PORT || 3001;
 
-mongoose.connect('mongodb+srv://ocampoad:E4JEuVUqFzs9QvK@cluster0.ga9ahxg.mongodb.net/socialNetworkDB?retryWrites=true&w=majority')
+mongoose.connect(DB_NAME)
 .then( () => {
     console.log('Success!');
 })
