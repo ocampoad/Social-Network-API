@@ -37,4 +37,6 @@ const reactionSchema =  new Schema({
     },
 });
 
-module.exports = model('Thoughts', thoughtsSchema);
+const Thoughts = mongoose.model('Thoughts', thoughtsSchema);
+
+module.exports = {Thoughts}

@@ -1,12 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv');
-
+require('dotenv').config();
+const routes = require('./routes')
 const app = express(); 
 
 const PORT = process.env.PORT || 3001;
 
-mongoose.connect(DB_NAME)
+mongoose.connect(process.env.DB_NAME)
 .then( () => {
     console.log('Success!');
 })
@@ -14,5 +14,7 @@ mongoose.connect(DB_NAME)
 
 app.use( express.json());
 app.use(express.urlencoded( {extended: true}));
+
+app.use(routes)
 
 app.listen( PORT, () => console.log(`App listening on port http://localhost:${PORT}`))
