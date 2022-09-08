@@ -4,7 +4,7 @@ const { User } = require('./../../models/User')
 
 router.get('/', async (req, res) => {
     try {
-        const thoughts = await Thoughts.find();
+        const thoughts = await Thoughts.find().populate('reactions');
         res.json(thoughts)
     } catch (error) {
         res.status(500).json({ error })
@@ -80,18 +80,21 @@ router.delete('/:thoughtsId', async (req, res) => {
 
 router.post('/:thoughtsId/reactions', async (req, res) => {
     try {
+        const newReaction = {
+            reactionBody: req.body.reactionBody,
+            username: req.body.username,
+        }
         const reactionNew = await Thoughts.findByIdAndUpdate(
             {
-                _id: req.params.thoughtId
+                _id: req.params.thoughtsId
             },
             {
-                $push: {
-                    reactions: [req.body.reactions]
-                }
+                $addToSet: {reactions: newReaction}  
             }
         );
         res.json(reactionNew);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error })
     }
 });
@@ -100,12 +103,10 @@ router.delete('/:thoughtsId/reactions/:reactionId', async (req, res) => {
     try {
         const reactionDelete = await Thoughts.findByIdAndUpdate(
             {
-                _id: req.params.thoughtId
+                _id: req.params.thoughtsId
             },
             {
-                $pull: {
-                    reaction: req.params.reactionId
-                }
+                $pull: {reactions: { _id: req.params.reactionId}}
             },
             {
                 new: true
@@ -119,3 +120,5 @@ router.delete('/:thoughtsId/reactions/:reactionId', async (req, res) => {
 
 
 module.exports = router;
+
+// 631842900ca06b3bcfcbe905
